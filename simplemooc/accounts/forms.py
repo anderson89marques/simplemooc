@@ -1,5 +1,9 @@
 from django import forms
 from django.contrib.auth import get_user_model
+from simplemooc.accounts.models import PasswordReset
+from simplemooc.core.utils import generate_hash_key
+from simplemooc.core.mail import send_mail_template
+
 
 User = get_user_model()  # Agora o django irá buscar o user configurado, no caso o nosso Usuário customizado
 
@@ -14,6 +18,19 @@ class PasswordResetForm(forms.Form):  # extendir de form pois não usuarei um mo
             return email
         else:
             return forms.ValidationError('Nenhum usuário encontrado com este email')
+
+    def save(self):
+        user = User.objects.get(email=self.cleaned_data['email'])
+        key = generate_hash_key(user.email)
+        reset = PasswordReset(user=user, key=key)
+        reset.save()
+
+        template_name = 'accounts/password_reset_mail.html'
+        subject = 'Criar Nova senha no simple mooc'
+        context = {
+            'reset': reset
+        }
+        send_mail_template(subject=subject, template_name=template_name, context=context, recipient_list=[user.email])
 
 
 class RegisterForm(forms.ModelForm):

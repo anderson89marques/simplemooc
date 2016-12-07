@@ -5,6 +5,7 @@ from django.core import validators
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager
 from django.conf import settings
 
+
 # Customizando nosso próprio usuário
 # Precisei adicionar no settings AUTH_USER_MODEL para indicar ao django que o User a ser usado será o meu user customizado
 class User(AbstractBaseUser, PermissionsMixin):

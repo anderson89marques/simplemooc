@@ -1,16 +1,17 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, update_session_auth_hash, get_user_model
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.forms import PasswordChangeForm, SetPasswordForm
 from simplemooc.accounts.forms import RegisterForm, EditAccountForm, PasswordResetForm
-from simplemooc.accounts.models import PasswordReset
 from simplemooc.core.views import home
-from simplemooc.core.utils import generate_hash_key
+from simplemooc.accounts.models import PasswordReset
+
 
 
 User = get_user_model()
 
-@login_required     # indica que só terá acesso a essa view quem estiver logado
+
+@login_required  # indica que só terá acesso a essa view quem estiver logado
 def dashboard(request):
     template_name = 'accounts/dashboard.html'
 
@@ -51,15 +52,26 @@ def password_reset(request):
     context = dict()
 
     if form.is_valid():
-        user = User.objects.get(email=form.cleaned_data['email'])
-        key = generate_hash_key(user.email)
-        reset = PasswordReset(user=user, key=key)
-        reset.save()
+        form.save()
         context['success'] = True
 
     context['form'] = form
 
     return render(request=request, template_name=template_name, context=context)
+
+
+def password_reset_confirm(request, key):
+    template_name = 'accounts/password_reset_confirm.html'
+    context = dict()
+    reset = get_object_or_404(PasswordReset, key=key)
+    form = SetPasswordForm(user=reset.user, data=request.POST or None)
+
+    if form.is_valid():
+        form.save()
+        context['success'] = True
+    context['form'] = form
+
+    return render(request, template_name, context)
 
 
 @login_required
