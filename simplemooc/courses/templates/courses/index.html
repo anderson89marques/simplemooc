@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="content">
+        <div class="pure-g-r content-ribbon">
+            <div class="pure-u-1">
+                <div class="l-box">
+                    <h4 class="content-subhead"> Listagem de Cursos do SimpleMOOC</h4>
+                    <p>Abaixo a lista de curos disponíveis na plataforma</p>
+                </div>
+            </div>
+        </div>
+
+        {% for course in courses %}
+            <div class="pure-g-r content-ribbon">
+                <div class="pure-u-1-3">
+                    <div class="l-box">
+                        <a href="{% url 'details' slug=course.slug %}"> <!-- Mantive essa forma de manter a url só pra estudo, pois nesse caso usar o get_absolute_url é a melhor forma -->
+                        {% if course.image %}
+                            <img src="{{ course.image.url }}" alt="Python na Web com Django">
+                        {% else %}
+                            <img src="{% static 'img/course-image.png' %}" alt="Python na Web com Django">
+                        {% endif %}
+                        </a>
+                    </div>
+                </div>
+                <div class="pure-u-2-3">
+                    <div class="l-box">
+                        <h4 class="content-subhead"><a href="{{ course.get_absolute_url }}" title="">{{ course.name }}</a></h4>
+                        <h3 class="content-subhead">Um curso para quem quer aprender a web com python de forma rápida e objetiva</h3>
+                        {{ course.description | linebreaks }} <!-- o linebreaks verifica se o texto tem quebras de linhas e coloca os <p>s-->
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+                <div class="pure-g-r content-ribbon">
+            <div class="pure-u-1">
+                <div class="l-box">
+                    <p>Nenhum curso disponível na plataforma.</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}
