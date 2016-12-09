@@ -2,9 +2,12 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, update_session_auth_hash, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm, SetPasswordForm
+from django.contrib import messages
+
 from simplemooc.accounts.forms import RegisterForm, EditAccountForm, PasswordResetForm
-from simplemooc.core.views import home
 from simplemooc.accounts.models import PasswordReset
+from simplemooc.core.views import home
+from simplemooc.courses.models import Enrollment
 
 
 
@@ -53,7 +56,7 @@ def password_reset(request):
 
     if form.is_valid():
         form.save()
-        context['success'] = True
+        messages.success(request, 'Um email lhe foi enviado!!')
 
     context['form'] = form
 
@@ -68,7 +71,7 @@ def password_reset_confirm(request, key):
 
     if form.is_valid():
         form.save()
-        context['success'] = True
+        messages.success(request, 'Sua senha foi criada com sucesso!!')
     context['form'] = form
 
     return render(request, template_name, context)
@@ -83,8 +86,8 @@ def edit(request):
         form = EditAccountForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()  # Salvando as alterações
-            form = EditAccountForm(instance=request.user)
-            context['success'] = True
+            messages.success(request, 'Os dados da sua conta foram alterados com sucesso!!')
+            return redirect(dashboard)
     else:
         form = EditAccountForm(instance=request.user)
     context['form'] = form

@@ -14,6 +14,7 @@ import os
 from decouple import config
 from dj_database_url import parse as dburl # para transformar a url em dicionário que é o formato que o django aceita
 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -135,7 +136,7 @@ DEFAULT_FROM_EMAIL = 'Nome <email@gmailcom>'
 CONTACT_EMAIL = 'contato@simplemood.com'
 
 # AUTH
-LOGIN_URL = 'entrar/'
+LOGIN_URL = '/conta/entrar/'
 LOGIN_REDIRECT_URL = '/'   # usado pela view login do django para redirecionar, no caso eu coloquei pra redirecionar pra home
 LOGOUT_URL = 'conta/sair/'
 AUTH_USER_MODEL = 'accounts.User'

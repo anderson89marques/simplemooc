@@ -8,6 +8,7 @@
     <meta name="description" content="Simple MOOC - Uma simples plataforma de ensino a distância" />
     <title>Simple MOOC</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.3.0/pure-min.css">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.css' %}" />
     <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
     {% block head %}{% endblock %}
 
@@ -31,7 +32,16 @@
             </ul>
         </div>
     </div>
-    {% block content %} {% endblock %}
+    <div class="pure-g-r content-ribbon">
+            {% if messages %}
+                <aside class="pure-u-1">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {%  endfor %}
+                </aside>
+            {%  endif %}
+    </div>
+    {% block content %}{% endblock %}
     <div class="footer">
         Simple MOOC - Uma simples plataforma de ensino a distância
     </div>
