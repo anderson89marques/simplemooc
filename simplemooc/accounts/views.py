@@ -17,7 +17,7 @@ User = get_user_model()
 @login_required  # indica que só terá acesso a essa view quem estiver logado
 def dashboard(request):
     template_name = 'accounts/dashboard.html'
-
+    print()
     return render(request, template_name=template_name)
 
 

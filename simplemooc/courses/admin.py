@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 
-from simplemooc.courses.models import Course
+from simplemooc.courses.models import Course, Enrollment, Announcement, Comment
 
 
 class CourseAdmin(admin.ModelAdmin):
@@ -10,4 +10,4 @@ class CourseAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
 
 admin.site.register(Course, CourseAdmin)
-
+admin.site.register([Enrollment, Announcement, Comment])

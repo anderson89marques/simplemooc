@@ -1,69 +1,25 @@
-{% extends 'accounts/dashboard.html' %}
+{% extends 'courses/course_dashboard.html' %}
 
-{% block extra_menu %}
-    <li class="pure-menu-heading">
-        {{ course }}
-    </li>
-    <li>
-        <a href="#">
-            <i class="fa fa-video-camera"></i>
-            Aulas e Materiais
-        </a>
-    </li>
-    <li>
-        <a href="#">
-            <i class="fa fa-info-circle"></i>
-            Informações
-        </a>
-    </li>
-    <li>
-        <a href="#">
-            <i class="fa fa-envelope"></i>
-            Anúncios
-        </a>
-    </li>
-    <li>
-        <a href="#">
-            <i class="fa fa-comments"></i>
-            Fórum de Dúvidas
-        </a>
-    </li>
-    {{ block.super }}
-{% endblock %}
-
+<!-- Chamando o dashboard_content do avô, que é dashboard -->
 {% block dashboard_content %}
-    <div class="well">
-        <h2>Iníco das aulas, sejam bem vindos</h2>
-        <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </p>
-        <p>
-            <a href="#comments" title="">
-                <i class="fa fa-comments-o"></i>
-                10 Comentários
-            </a>
-        </p>
-    </div>
-    <div class="well">
-        <h2>Iníco das aulas, sejam bem vindos</h2>
-        <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </p>
-        <p>
-            <a href="#comments" title="">
-                <i class="fa fa-comments-o"></i>
-                10 Comentários
-            </a>
-        </p>
-    </div>
+    {% for announcement in course.announcements.all %}
+        <div class="well">
+            <h2>{{ announcement.title }}</h2>
+            {{ announcement.content|linebreaks }}
+            <p>
+                <a href="#comments" title="">
+                    <i class="fa fa-comments-o"></i>
+                    {% with coments_count=announcement.comments.count %}
+                        {{ coments_count }}
+                        Comentário{{ coments_count|pluralize }}
+                    {% endwith %}
+                </a>
+            </p>
+        </div>
+    {% empty %}
+        <div class="well">
+            <h2>Nenhum Anúncio criado!!</h2>
+        </div>
+    {% endfor %}
+
 {% endblock %}

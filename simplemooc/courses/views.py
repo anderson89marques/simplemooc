@@ -39,6 +39,28 @@ def details(request, slug):
     return render(request, template_name, context=context)
 
 
+@login_required
+def undo_enrollment(request, slug):
+    course = get_object_or_404(Course, slug=slug)
+    enrollment_instance, created = Enrollment.objects.get_or_create(
+        user=request.user, course=course
+    )
+
+    if request.method == 'POST':
+        enrollment_instance.delete()
+        messages.success(request, 'Sua Inscrição foi cancelada com sucesso!')
+
+        return redirect(dashboard)
+
+    template_name = "courses/undo_enrollment.html"
+    context = {
+        'enrollment': enrollment_instance,
+        'course': course
+    }
+
+    return render(request, template_name=template_name, context=context)
+
+
 # processo de inscrição
 @login_required
 def enrollment(request, slug):
